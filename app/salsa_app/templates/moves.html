@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% load filters %}
+
+{% block content %}
+  <table class="wrapped-table">
+    <thead>
+      <tr>
+        {% for field in move_fields %}
+          <th>{{ field.verbose_name|title }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for move in moves %}
+        <tr>
+          {% for field in move_fields %}
+            <td>{{ move|get_attribute:field.name }}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

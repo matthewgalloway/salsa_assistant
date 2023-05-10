@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% load filters %}
+
+{% block content %}
+    <h2>List of All Combos</h2>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Moves</th>
+            <th>Difficulty Remembering</th>
+            <th>Difficulty of Move</th>
+            <th>Video Link</th>
+        </tr>
+        {% for combo in combos %}
+            <tr>
+                <td>{{ combo.name }}</td>
+                <td>
+                    <ul>
+                        {% for move in combo.moves.all %}
+                            <li>{{ combo.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>{{ combo.difficulty_remembering|get_description:memory_difficulty_dict}}</td>
+                <td>{{ combo.difficulty_of_move|get_description:difficulty_levels_dict}}</td>
+                <td><a href="{{ combo.video_link }}">Video</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

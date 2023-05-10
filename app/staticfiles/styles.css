@@ -1,0 +1,140 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+.card h2 {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+}
+
+.card p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    margin-bottom: 0.5em;
+}
+
+.card p span {
+    font-weight: bold;
+    margin-right: 0.5em;
+}
+
+.card button {
+    border-radius: 5px;
+    padding: 0.5em 1em;
+    font-size: 1em;
+    margin: 0.5em;
+}
+
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  .card {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .label {
+    font-weight: bold;
+  }
+  
+  .info {
+    margin-bottom: 20px;
+  }
+  
+  .show-answer-button {
+    display: block;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0 auto;
+    padding: 10px 20px;
+    text-align: center;
+  }
+  
+  .show-answer-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .submit-rating {
+    display: block;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0 auto;
+    padding: 10px 20px;
+    text-align: center;
+  }
+  
+  .submit-rating:hover {
+    background-color: #0056b3;
+  }
+
+  .rating-form {
+    display: flex;
+    justify-content: center;
+  }
+
+  .form-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  
+  .form-row label {
+    margin-right: 10px;
+  }
+
+  .wrapped-table {
+    table-layout: fixed;
+    width: 100%;
+  }
+  
+  .wrapped-table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    /* max-width: 350px;  */
+  }

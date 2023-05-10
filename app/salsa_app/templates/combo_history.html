@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <table>
+    <thead>
+      <tr>
+        <th>Combo</th>
+        <th>Date Last Practiced</th>
+        <th>Difficulty Remembering</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for combo_history in combo_histories %}
+        <tr>
+          <td>{{ combo_history.name }}</td>
+          <td>{{ combo_history.date_last_practiced }}</td>
+          <td>{{ combo_history.difficulty_remembering }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
