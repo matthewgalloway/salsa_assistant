@@ -1,5 +1,5 @@
 from random import choice
-from .models import Move, Combo, MoveHistory, ComboHistory
+from .models import Move, Combo, MoveHistory, ComboHistory, Position
 from datetime import datetime, timedelta
 from django.utils import timezone
 
@@ -25,7 +25,11 @@ def fetch_latest_Move_or_Combo():
         combos = list(Combo.objects.all())
         item = choice(moves + combos)
         return item
-
+    
+def fetch_latest_position():
+     position = list(Position.objects.all())
+     item = choice(position)
+     return item
 
 def save_item_history(item,form, interval, easiness_factor, repetition):
         

@@ -1,7 +1,7 @@
 from django import forms
 
 from django.forms import ModelForm
-from .models import MoveHistory, ComboHistory
+from .models import MoveHistory, ComboHistory, PositionHistory
 
 
 class MoveHistoryForm(ModelForm):
@@ -24,6 +24,20 @@ class ComboHistoryForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ComboHistoryForm, self).__init__(*args, **kwargs)
+        self.fields['repetition'].required = False
+        self.fields['interval'].required = False
+        self.fields['easiness_factor_remembering'].required = False
+        self.fields['date_next_review'].required = False
+
+
+
+class PositionHistoryForm(ModelForm):
+    class Meta:
+        model = PositionHistory
+        fields = [ 'difficulty_remembering','difficulty_of_move',  'repetition', 'interval','easiness_factor_remembering','date_next_review']
+
+    def __init__(self, *args, **kwargs):
+        super(PositionHistoryForm, self).__init__(*args, **kwargs)
         self.fields['repetition'].required = False
         self.fields['interval'].required = False
         self.fields['easiness_factor_remembering'].required = False

@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import MoveHistory, ComboHistory
-from .utils import fetch_latest_Move_or_Combo
+from .models import MoveHistory, ComboHistory, Move, Combo, Position, PositionHistory
+from .utils import fetch_latest_Move_or_Combo,fetch_latest_position
 from .models import Combo, Move
 from .variable_utils import DIFFICULTY_LEVELS, MEMORY_DIFFICULTY
 from random import choice
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
-from .forms import MoveHistoryForm, ComboHistoryForm
+from .forms import MoveHistoryForm, ComboHistoryForm,PositionHistoryForm
 from .spaced_repition_algorithm import spaced_repetition
 from datetime import datetime, timedelta
 from django.db import models
@@ -18,6 +18,31 @@ logger = logging.getLogger('salsa_app')
 
 difficulty_levels_dict = {key: value for key, value in DIFFICULTY_LEVELS}
 memory_difficulty_dict = {key: value for key, value in MEMORY_DIFFICULTY}
+
+
+def home(request):
+    return render(request, 'home.html')
+
+def position_review(request):
+    
+    item = fetch_latest_position()
+    if request.method == 'POST':
+        form = PositionHistoryForm(request.POST)
+        if form.is_valid():
+            interval, easiness_factor, repetition = spaced_repetition(form)
+            try:
+                move = Position.objects.get(id=request.POST.get('item_id'))
+                save_item_history(move, form, interval, easiness_factor, repetition)
+            except Position.DoesNotExist:
+                print('Error Position does not exist')
+
+        return redirect('position_review')
+
+    if isinstance(item, Position):
+        form = PositionHistoryForm(initial={'move': item.id})
+
+    return render(request, 'position_review.html', {'item': item, 'form': form})
+
 
 
 
@@ -55,7 +80,8 @@ def algo_practice(request):
     else:
         form = ComboHistoryForm(initial={'combo': item.id})
 
-    return render(request, 'home.html', {'item': item, 'form': form, 'item_type': 'move' if isinstance(item, Move) else 'combo'})
+
+    return render(request, 'algo_review.html', {'item': item, 'form': form, 'item_type': 'move' if isinstance(item, Move) else 'combo'})
 
 
 def move_history(request):

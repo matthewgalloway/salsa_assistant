@@ -20,7 +20,9 @@ from salsa_app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('home/', views.home, name='home'),
     path('algo_practice/', views.algo_practice, name='algo_practice'),
+    path('position_review/', views.position_review, name='position_review'),
     path('all_moves/', views.all_moves),
     path('all_combos/', views.all_combos),
     path('move_history/', views.move_history, name='move_history'),

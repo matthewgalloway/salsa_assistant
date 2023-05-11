@@ -1,43 +1,5 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="card">
-  <h2 class="title">{{ item.name }}</h2>
-  <div class="info">
-    <p><span class="label">Entry Hold:</span> {{ item.entry_hold }}</p>
-    <p><span class="label">Exit Hold:</span> {{ item.exit_hold }}</p>
-    <p><span class="label">Base Move:</span> {{ item.base_move }}</p>
-  </div>
 
-  <button id="show-answer-button" class="show-answer-button">Show Answer</button>
-  <div id="answer" style="display: none;">
-    <p><a href="{{ item.video_link }}" target="_blank">Watch Video</a></p>
-
-    <p><span class="label">Notes:</span> {{ item.notes }}</p>
-    <form method="post">
-      {% csrf_token %}
-      <div class="form-row">
-        <label class="label">{{ form.difficulty_remembering.label }}</label>{{ form.difficulty_remembering }}
-      </div>
-      <div class="form-row">
-        <label class="label">{{ form.difficulty_of_move.label }}</label>{{ form.difficulty_of_move }}
-      </div>
-      <input type="hidden" name="repetition" value="{{ item.repetition}}">
-      <input type="hidden" name="easiness_factor_remembering" value="{{ item.easiness_factor_remembering}}">
-      <input type="hidden" name="interval" value="{{item.interval}}">
-      <input type="hidden" name="item_id" value="{{ item.id }}">
-      <input type="hidden" name="item_type" value="{{ item_type }}">
-      <div class="form-row">
-        <button type="submit" class="submit-rating">Submit Rating</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-  <script>
-    document.getElementById("show-answer-button").onclick = function() {
-      document.getElementById("answer").style.display = "block";
-      this.style.display = "none";
-    };
-  </script>
 {% endblock %}

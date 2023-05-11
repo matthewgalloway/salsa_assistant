@@ -29,8 +29,8 @@ HOLDS = (("Left2Left", _("Left2Left")),
 DIFFICULTY_LEVELS = (("5", _("Can always do in socials")),
                      ("4", _("Can sometimes do in socials")),
                      ("3", _("Cant do in socials but can do in class")),
-                     ( "2", _("Cant do in class")),
-                     ("1", _("Never Tried")))
+                     ( "4", _("Cant do in class")),
+                     ("5", _("Never Tried")))
 
 MEMORY_DIFFICULTY = (("3", _("Easy")),
         ("2", _("Good")),
