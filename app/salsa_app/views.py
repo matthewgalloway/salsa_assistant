@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 from django.db import models
 import logging
 from .utils import save_item_history
+from django.shortcuts import get_object_or_404
 logger = logging.getLogger('salsa_app')
 
 difficulty_levels_dict = {key: value for key, value in DIFFICULTY_LEVELS}
@@ -114,3 +115,10 @@ def all_moves(request):
 
 
 
+def update_move_difficulty(request, move_id):
+    move = get_object_or_404(Move, pk=move_id)
+    if request.method == 'POST':
+        difficulty_remembering = request.POST.get('difficulty_remembering')
+        move.difficulty_remembering = difficulty_remembering
+        move.save()
+    return redirect('position_review')

@@ -25,6 +25,7 @@ urlpatterns = [
     path('position_review/', views.position_review, name='position_review'),
     path('all_moves/', views.all_moves),
     path('all_combos/', views.all_combos),
+    path('update_move_difficulty/<int:move_id>/', views.update_move_difficulty, name='update_move_difficulty'),
     path('move_history/', views.move_history, name='move_history'),
     path('position_history/', views.position_history, name='position_history'),
     path('combo_history/', views.combo_history, name='combo_history'),

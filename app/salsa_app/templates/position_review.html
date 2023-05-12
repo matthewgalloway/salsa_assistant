@@ -29,13 +29,24 @@
           </thead>
           <tbody>
             {% for move in item.moves.all %}
-              <tr>
-                <td>{{ move.name }}</td>
-                <td>{{ move.entry_hold }}</td>
-                <td>{{ move.exit_hold }}</td>
-                <td><a href="{{ move.video_link }}" target="_blank">Video</a></td>
-              </tr>
-            {% endfor %}
+            <tr>
+              <td>{{ move.name }}</td>
+              <td>{{ move.entry_hold }}</td>
+              <td>{{ move.exit_hold }}</td>
+              <td><a href="{{ move.video_link }}" target="_blank">Video</a></td>
+              <td>
+                <form method="post" action="{% url 'update_move_difficulty' move.id %}">
+                  {% csrf_token %}
+                  <select name="difficulty_remembering">
+                    {% for difficulty, name in form.difficulty_remembering.field.choices %}
+                      <option value="{{ difficulty }}" {% if move.difficulty_remembering == difficulty %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                  </select>
+                  <input type="submit" value="Update">
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
           </tbody>
         </table>
       {% else %}
