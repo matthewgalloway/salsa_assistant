@@ -27,15 +27,23 @@ def fetch_latest_Move_or_Combo():
         return item
     
 def fetch_latest_position():
-     position = list(Position.objects.all())
-     item = choice(position)
-     return item
+    latest_position = Position.objects.all().order_by('date_next_review').first()
+    if latest_position:
+     return latest_position
+    else:
+     all_positions = list(Position.objects.all())
+     return choice(all_positions)
+
 
 def save_item_history(item,form, interval, easiness_factor, repetition):
         
         history = form.save(commit=False)
         history.date_last_practiced = timezone.now()
-        history.move = item
+        if isinstance(item, Position):
+            history.position = item
+        else:
+            history.move = item
+
         history.easiness_factor_remembering = easiness_factor
         history.repetition = repetition
         history.interval = interval

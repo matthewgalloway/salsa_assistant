@@ -26,6 +26,7 @@ urlpatterns = [
     path('all_moves/', views.all_moves),
     path('all_combos/', views.all_combos),
     path('move_history/', views.move_history, name='move_history'),
+    path('position_history/', views.position_history, name='position_history'),
     path('combo_history/', views.combo_history, name='combo_history'),
 
 ]

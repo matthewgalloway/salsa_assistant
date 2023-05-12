@@ -6,6 +6,12 @@ class Position(models.Model):
     name = models.CharField(max_length=255)
     moves = models.ManyToManyField('Move', related_name='positions')
 
+    difficulty_remembering = models.CharField(max_length=20,choices=MEMORY_DIFFICULTY, default=0) # Quality
+    easiness_factor_remembering = models.IntegerField(default=0)
+    repetition = models.IntegerField(default=0)
+    interval = models.IntegerField(default=0)
+    date_next_review = models.DateTimeField(default=default_date, blank=True)
+        
     def __str__(self):
         return self.name
     

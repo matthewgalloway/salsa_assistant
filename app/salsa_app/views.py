@@ -83,6 +83,11 @@ def algo_practice(request):
 
     return render(request, 'algo_review.html', {'item': item, 'form': form, 'item_type': 'move' if isinstance(item, Move) else 'combo'})
 
+def position_history(request):
+    position_histories = PositionHistory.objects.all()
+    position_history_fields = PositionHistory._meta.get_fields()
+    
+    return render(request, 'position_history.html', {'position_histories': position_histories, 'position_history_fields': position_history_fields})
 
 def move_history(request):
     move_histories = MoveHistory.objects.all()
@@ -106,4 +111,6 @@ def all_moves(request):
         'move_fields': move_fields,
     }
     return render(request, 'moves.html', context)
+
+
 

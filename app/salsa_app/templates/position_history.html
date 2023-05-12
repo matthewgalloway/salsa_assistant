@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load filters %}
+{% block content %}
+  <table>
+    <thead>
+      <tr>
+        {% for field in position_history_fields %}
+          <th>{{ field.verbose_name|title }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for position_history in position_histories %}
+        <tr>
+          {% for field in position_history_fields %}
+            <td>{{ position_history|get_attribute:field.name }}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

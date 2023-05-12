@@ -48,7 +48,7 @@
         <label class="label">{{ form.difficulty_of_move.label }}</label>{{ form.difficulty_of_move }}
       </div>
       <input type="hidden" name="repetition" value="{{ item.repetition}}">
-      <input type="hidden" name="easiness_factor_remembering" value="{{ item.easiness_factor_remembering}}">
+      <input type="hidden" name="easiness_factor_remembering" value="{{item.easiness_factor_remembering}}">
       <input type="hidden" name="interval" value="{{item.interval}}">
       <input type="hidden" name="item_id" value="{{ item.id }}">
       <input type="hidden" name="item_type" value="{{ item_type }}">
