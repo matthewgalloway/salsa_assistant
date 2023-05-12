@@ -1,9 +1,9 @@
 def spaced_repetition(form):
     
-    
-    easiness_factor = int(form.cleaned_data['easiness_factor_remembering'])
-    repetition = int(form.cleaned_data['repetition'])
-    interval = int(form.cleaned_data['interval'])
+    # handles if item has no histroy by replacing with zero
+    easiness_factor = int(form.cleaned_data['easiness_factor_remembering'] or 0)
+    repetition = int(form.cleaned_data['repetition'] or 0)
+    interval = int(form.cleaned_data['interval'] or 0)
     quality = int(form.cleaned_data['difficulty_remembering'])
 
     smallest_repition_minutes = 5

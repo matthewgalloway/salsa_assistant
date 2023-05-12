@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+  <h2 class="title">{{ item.name }}</h2>
+  <div class="info">
+    {% if item.moves.count > 0 %}
+      {% for move in item.moves.all %}
+        <p><span class="label">Entry Hold:</span> {{ move.entry_hold }}</p>
+      {% endfor %}
+    {% else %}
+      <p>No moves currently associated with this position.</p>
+    {% endif %}
+  </div>
+
+  <button id="show-answer-button" class="show-answer-button">Show Answer</button>
+  <div id="answer" style="display: none;">
+    <form method="post">
+      {% csrf_token %}
+      {% if item.moves.count > 0 %}
+        <table>
+          <thead>
+            <tr>
+              <th>Move Name</th>
+              <th>Entry Hold</th>
+              <th>Exit Hold</th>
+              <th>Video</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for move in item.moves.all %}
+            <tr>
+              <td>{{ move.name }}</td>
+              <td>{{ move.entry_hold }}</td>
+              <td>{{ move.exit_hold }}</td>
+              <td><a href="{{ move.video_link }}" target="_blank">Video</a></td>
+              <td>
+                <form method="post" action="{% url 'update_move_difficulty' move.id %}">
+                  {% csrf_token %}
+                  <select name="difficulty_remembering">
+                    {% for difficulty, name in form.difficulty_remembering.field.choices %}
+                      <option value="{{ difficulty }}" {% if move.difficulty_remembering == difficulty %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                  </select>
+                  <input type="submit" value="Update">
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>No moves currently associated with this position.</p>
+      {% endif %}
+      <div class="form-row">
+        <label class="label">{{ form.difficulty_remembering.label }}</label>{{ form.difficulty_remembering }}
+      </div>
+      <div class="form-row">
+        <label class="label">{{ form.difficulty_of_move.label }}</label>{{ form.difficulty_of_move }}
+      </div>
+      <input type="hidden" name="repetition" value="{{ item.repetition}}">
+      <input type="hidden" name="easiness_factor_remembering" value="{{item.easiness_factor_remembering}}">
+      <input type="hidden" name="interval" value="{{item.interval}}">
+      <input type="hidden" name="item_id" value="{{ item.id }}">
+      <input type="hidden" name="item_type" value="{{ item_type }}">
+      <div class="form-row">
+        <button type="submit" class="submit-rating">Submit Rating</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  <script>
+    document.getElementById("show-answer-button").onclick = function() {
+      document.getElementById("answer").style.display = "block";
+      this.style.display = "none";
+    };
+  </script>
+{% endblock %}
