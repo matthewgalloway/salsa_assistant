@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import MoveHistory, ComboHistory, Move, Combo, Position, PositionHistory
+from .models import MoveHistory, ComboHistory, Move, Combo, Position, PositionHistory, Shine
 from .utils import fetch_latest_Move_or_Combo,fetch_latest_position
 from .models import Combo, Move
 from .variable_utils import DIFFICULTY_LEVELS, MEMORY_DIFFICULTY
@@ -12,6 +12,8 @@ from .forms import MoveHistoryForm, ComboHistoryForm,PositionHistoryForm
 from .spaced_repition_algorithm import spaced_repetition
 from datetime import datetime, timedelta
 from django.db import models
+from django.db.models.functions import TruncDate
+from django.db.models import Count, F
 import logging
 from .utils import save_item_history
 from django.shortcuts import get_object_or_404
@@ -22,7 +24,51 @@ memory_difficulty_dict = {key: value for key, value in MEMORY_DIFFICULTY}
 
 
 def home(request):
-    return render(request, 'home.html')
+    # Get the current date and time
+    now = timezone.now()
+
+    # Get the date one month from now and one month ago
+    one_month_future = now + timedelta(days=30)
+    one_month_past = now - timedelta(days=30)
+
+    # Query the Move and Combo models to get the data for the charts
+# Query the Move and Combo models to get the data for the charts
+    repetition_counts = Move.objects.values('repetition').annotate(count=Count('id')).union(
+        Combo.objects.values('repetition').annotate(count=Count('id'))).order_by('repetition')
+
+
+    review_counts = (
+        Move.objects
+        .filter(date_next_review__range=[one_month_past, one_month_future])
+        .annotate(date=TruncDate('date_next_review'))
+        .values('date')
+        .annotate(count=Count('id'))
+        .union(
+            Combo.objects
+            .filter(date_next_review__range=[one_month_past, one_month_future])
+            .annotate(date=TruncDate('date_next_review'))
+            .values('date')
+            .annotate(count=Count('id'))
+        )
+        .order_by('date')
+    )
+
+    # Total counts for Moves, Combos and their practiced percentage
+    total_moves = Move.objects.count()
+    practiced_moves = Move.objects.filter(repetition__gt=0).count()
+    percent_moves_practiced = round((practiced_moves / total_moves) * 100 if total_moves > 0 else 0,2)
+
+    total_combos = Combo.objects.count()
+    practiced_combos = Combo.objects.filter(repetition__gt=0).count()
+    percent_combos_practiced = round((practiced_combos / total_combos) * 100 if total_combos > 0 else 0,2)
+
+    total_shines = Shine.objects.count()
+    practiced_shines = Combo.objects.filter(repetition__gt=0).count()
+    percent_shines_practiced = round((practiced_shines / total_shines) * 100 if total_shines > 0 else 0,2)
+
+    return render(request, 'home.html', {'repetition_counts': repetition_counts, 'review_counts': review_counts, 'total_moves': total_moves, 'percent_moves_practiced': percent_moves_practiced, 'total_combos': total_combos, 'percent_combos_practiced': percent_combos_practiced, 'total_shines': total_shines, 'percent_shines_practiced': percent_shines_practiced})
+
+
 
 def position_review(request):
     
