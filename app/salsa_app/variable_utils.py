@@ -21,8 +21,10 @@ HOLDS = (("Left2Left", _("Left2Left")),
         ( "Left2Right", _("Left2Right")),
         ( "ClosedPosition", _("ClosedPosition")),
         ("Both Normal Hold", _("Both Normal Hold")),
-        ("Both - Left Over Right",_("Both - Left Over Right")),
+        ("BodyWrap-LeftOverRight", _("BodyWrap-LeftOverRight")),
+        ("BodyWrap-RightOverLeft",_("BodyWrap-RightOverLeft")),
         ("Both - Right Over Left",_("Both - Right Over Left")),
+        ("Both - Left Over Right",_("Both - Left Over Right")),
         ( "Free Spin", _("Free Spin"))
         )
 
