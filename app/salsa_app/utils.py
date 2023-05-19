@@ -2,7 +2,9 @@ from random import choice
 from .models import Move, Combo, MoveHistory, ComboHistory, Position
 from datetime import datetime, timedelta
 from django.utils import timezone
-
+from django.db.models import Count, F
+from django.db.models.functions import TruncDate
+from django.utils import timezone
 def fetch_latest_Move_or_Combo():
 
     # Order moves and combos by date_next_review (ascending) and pick the first one
@@ -60,3 +62,35 @@ def save_item_history(item,form, interval, easiness_factor, repetition):
         item.date_next_review = history.date_last_practiced + timedelta(days=item.interval)
         item.save()
 
+def get_repetition_counts(request):
+    user = request.user
+    repetition_counts = Move.objects.filter(user=user).values('repetition').annotate(count=Count('id')).union(
+        Combo.objects.filter(user=user).values('repetition').annotate(count=Count('id'))).order_by('repetition')
+        
+    return repetition_counts
+
+
+def get_review_counts(request):
+        # Get the current date and time
+    now = timezone.now()
+
+    # Get the date one month from now and one month ago
+    one_month_future = now + timedelta(days=30)
+    one_month_past = now - timedelta(days=30)
+    
+    review_counts = (
+        Move.objects
+        .filter(user=request.user, date_next_review__range=[one_month_past, one_month_future])
+        .annotate(date=TruncDate('date_next_review'))
+        .values('date')
+        .annotate(count=Count('id'))
+        .union(
+            Combo.objects
+            .filter(user=request.user, date_next_review__range=[one_month_past, one_month_future])
+            .annotate(date=TruncDate('date_next_review'))
+            .values('date')
+            .annotate(count=Count('id'))
+        )
+        .order_by('date')
+    )
+    return review_counts
