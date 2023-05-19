@@ -37,3 +37,7 @@ DIFFICULTY_LEVELS = (("5", _("Can always do in socials")),
 MEMORY_DIFFICULTY = (("3", _("Easy")),
         ("2", _("Good")),
         ("1", _("Again")))  
+
+
+difficulty_levels_dict = {key: value for key, value in DIFFICULTY_LEVELS}
+memory_difficulty_dict = {key: value for key, value in MEMORY_DIFFICULTY}

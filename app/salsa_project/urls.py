@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from salsa_app import views
+from django.contrib.auth.views import LoginView, LogoutView
 
 
 urlpatterns = [
@@ -29,5 +30,8 @@ urlpatterns = [
     path('move_history/', views.move_history, name='move_history'),
     path('position_history/', views.position_history, name='position_history'),
     path('combo_history/', views.combo_history, name='combo_history'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('register/', views.register, name='register'),
+    path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
 
 ]
