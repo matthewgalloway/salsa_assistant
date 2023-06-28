@@ -23,13 +23,19 @@ LOGIN_URL = 'login'
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-t=ky+giu!kknu+1hmnc37a0=!x$#uvp(0#a*!sci+7lahzi)a-'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'changeme')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
 ALLOWED_HOSTS = []
+ALLOWED_HOSTS.extend(
+    filter(
+        None, 
+        os.environ.get('ALLOWED_HSOTS', '').split(',')
+    )
 
+)
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Application definition

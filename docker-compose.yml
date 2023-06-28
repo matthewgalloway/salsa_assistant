@@ -18,6 +18,7 @@ services:
       - DB_NAME=my_project_db
       - DB_USER=my_user
       - DB_PASS=my_password
+      - DEBUG=1
     depends_on:
       - db
 
