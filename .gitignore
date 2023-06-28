@@ -1,0 +1,66 @@
+# .gitignore
+
+# Python/Django
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.log
+*.pot
+*.pyc
+*.sql
+db.sqlite3
+media
+
+# Django specific
+*.log
+*.pot
+*.pyc
+db.sqlite3
+media
+
+# Virtual environment
+venv/
+ENV/
+
+# Django specific
+*.log
+*.pot
+*.pyc
+db.sqlite3
+media
+
+# Development files
+*.sqlite3
+
+# IPython
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# celery beat schedule file
+celerybeat-schedule
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+
+**/__pycache__/
+
+# System Files
+.DS_Store
+Thumbs.db
+

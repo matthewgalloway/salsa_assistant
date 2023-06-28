@@ -28,22 +28,22 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractBaseUser, PermissionsMixin):
-    groups = models.ManyToManyField(
-        'auth.Group',
-        blank=True,
-        help_text=_('The groups this user belongs to. A user will get all permissions granted to each of their groups.'),
-        related_name="salsa_app_user_set",
-        related_query_name="salsa_app_user",
-        verbose_name=_('groups')
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        blank=True,
-        help_text=_('Specific permissions for this user.'),
-        related_name="salsa_app_user_set",
-        related_query_name="salsa_app_user",
-        verbose_name=_('user permissions')
-    )
+    # groups = models.ManyToManyField(
+    #     'auth.Group',
+    #     blank=True,
+    #     help_text=_('The groups this user belongs to. A user will get all permissions granted to each of their groups.'),
+    #     related_name="salsa_app_user_set",
+    #     related_query_name="salsa_app_user",
+    #     verbose_name=_('groups')
+    # )
+    # user_permissions = models.ManyToManyField(
+    #     'auth.Permission',
+    #     blank=True,
+    #     help_text=_('Specific permissions for this user.'),
+    #     related_name="salsa_app_user_set",
+    #     related_query_name="salsa_app_user",
+    #     verbose_name=_('user permissions')
+    # )
     email=models.EmailField(max_length=255, unique=True)
     name=models.CharField(max_length=255)
     is_active=models.BooleanField(default=True)
@@ -58,7 +58,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Position(models.Model):
     name = models.CharField(max_length=255)
     moves = models.ManyToManyField('Move', related_name='positions')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     difficulty_remembering = models.CharField(max_length=20,choices=MEMORY_DIFFICULTY, default=0) # Quality
     easiness_factor_remembering = models.IntegerField(default=0)
     repetition = models.IntegerField(default=0)
@@ -71,7 +71,7 @@ class Position(models.Model):
 class Move(models.Model):
     name = models.CharField(max_length=255)
     # Remove the line below
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     entry_hold = models.CharField(max_length=40,choices=HOLDS, null=True, blank=True)
     exit_hold = models.CharField(max_length=40,choices=HOLDS, null=True, blank=True)
 
@@ -91,7 +91,7 @@ class Move(models.Model):
 class Combo(models.Model):
     name = models.CharField(max_length=255)
     Move = models.ManyToManyField(Move)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     difficulty_remembering = models.CharField(max_length=20,choices=MEMORY_DIFFICULTY, default=0) # Quality
     date_next_review = models.DateTimeField(default=default_date, blank=True)
     easiness_factor_remembering = models.IntegerField(default=0)
@@ -105,7 +105,7 @@ class Combo(models.Model):
 
 class ComboHistory(models.Model):
     combo = models.ForeignKey(Combo, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date_last_practiced = models.DateTimeField(default=default_date, blank=True)
     date_last_practiced_social = models.DateTimeField(default=default_date, blank=True)
     date_next_review = models.DateTimeField(default=default_date, blank=True)
@@ -135,7 +135,7 @@ class PositionHistory(models.Model):
     
 class MoveHistory(models.Model):
     move = models.ForeignKey(Move, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date_last_practiced = models.DateTimeField(default=default_date, blank=True)
     date_last_practiced_social = models.DateTimeField(default=default_date, blank=True)
     date_next_review = models.DateTimeField(default=default_date, blank=True)
@@ -151,7 +151,7 @@ class MoveHistory(models.Model):
 class Shine(models.Model):
     name = models.CharField(max_length=255)
     # Remove the line below
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     entry_hold = models.CharField(max_length=40,choices=HOLDS, null=True, blank=True)
     exit_hold = models.CharField(max_length=40,choices=HOLDS, null=True, blank=True)
 
@@ -167,9 +167,9 @@ class Shine(models.Model):
     def __str__(self):
         return self.name
     
-class ShineHistory(models.Model):
+class ShineHistory(models.Model):   
     move = models.ForeignKey(Shine, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date_last_practiced = models.DateTimeField(default=default_date, blank=True)
     date_last_practiced_social = models.DateTimeField(default=default_date, blank=True)
     date_next_review = models.DateTimeField(default=default_date, blank=True)

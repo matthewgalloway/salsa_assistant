@@ -18,7 +18,7 @@ def position_review(request):
             interval, easiness_factor, repetition = spaced_repetition(form)
             try:
                 move = Position.objects.get(id=request.POST.get('item_id'))
-                save_item_history(move, form, interval, easiness_factor, repetition)
+                save_item_history(move, form, interval, easiness_factor, repetition, request.user)
             except Position.DoesNotExist:
                 print('Error Position does not exist')
 

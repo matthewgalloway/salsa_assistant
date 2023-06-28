@@ -133,8 +133,6 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MPODEL = 'salsa_app.User'
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
