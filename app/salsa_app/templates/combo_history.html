@@ -1,20 +1,20 @@
 {% extends "base.html" %}
-
+{% load filters %}
 {% block content %}
   <table>
     <thead>
       <tr>
-        <th>Combo</th>
-        <th>Date Last Practiced</th>
-        <th>Difficulty Remembering</th>
+        {% for field in combo_fields %}
+          <th>{{ field.verbose_name|title }}</th>
+        {% endfor %}
       </tr>
     </thead>
     <tbody>
-      {% for combo_history in combo_histories %}
+      {% for combo in combos %}
         <tr>
-          <td>{{ combo_history.name }}</td>
-          <td>{{ combo_history.date_last_practiced }}</td>
-          <td>{{ combo_history.difficulty_remembering }}</td>
+          {% for field in combo_fields %}
+            <td>{{ combo|get_attribute:field.name }}</td>
+          {% endfor %}
         </tr>
       {% endfor %}
     </tbody>

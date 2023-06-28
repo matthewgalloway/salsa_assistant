@@ -25,7 +25,7 @@ def algo_practice(request):
                 interval, easiness_factor, repetition = spaced_repetition(form)
                 try:
                     move = Move.objects.get(id=request.POST.get('item_id'))
-                    save_item_history(move, form, interval, easiness_factor, repetition)
+                    save_item_history(move, form, interval, easiness_factor, repetition, request.user)
                 except Move.DoesNotExist:
                     print('Error Move does not exist')
 
@@ -35,7 +35,7 @@ def algo_practice(request):
                 interval, easiness_factor, repetition = spaced_repetition(form)
                 try:
                     combo = Combo.objects.get(id=request.POST.get('item_id'))
-                    save_item_history(combo, form, interval, easiness_factor, repetition)
+                    save_item_history(combo, form, interval, easiness_factor, repetition, request.user)
                 except Combo.DoesNotExist:
                     print('Error Combo does not exist')
 

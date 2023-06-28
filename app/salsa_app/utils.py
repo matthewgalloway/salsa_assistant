@@ -5,6 +5,9 @@ from django.utils import timezone
 from django.db.models import Count, F
 from django.db.models.functions import TruncDate
 from django.utils import timezone
+import logging
+logger = logging.getLogger('salsa_app')
+
 def fetch_latest_Move_or_Combo():
 
     # Order moves and combos by date_next_review (ascending) and pick the first one
@@ -37,37 +40,64 @@ def fetch_latest_position():
      return choice(all_positions)
 
 
-def save_item_history(item,form, interval, easiness_factor, repetition):
-        
-        history = form.save(commit=False)
-        history.date_last_practiced = timezone.now()
-        if isinstance(item, Position):
-            history.position = item
-        else:
-            history.move = item
+def save_item_history(item, form, interval, easiness_factor, repetition, user):
+    
+    history = form.save(commit=False)
+    history.date_last_practiced = timezone.now()
 
-        history.easiness_factor_remembering = easiness_factor
-        history.repetition = repetition
-        history.interval = interval
-        history.date_next_review = history.date_last_practiced + timedelta(days=history.interval)
-        history.save()
+    # Update the item instance
+    item.difficulty_remembering = form.cleaned_data['difficulty_remembering']
+    item.difficulty_of_move = form.cleaned_data['difficulty_of_move']
+    item.easiness_factor_remembering = easiness_factor
+    item.repetition = repetition
+    item.interval = interval
+    item.date_next_review = history.date_last_practiced + timedelta(days=item.interval)
+    item.save()
+
+    if isinstance(item, Position):
+        history.position = item
+    elif isinstance(item, Move):
+        history.move = item
+    elif isinstance(item, Combo):
+        history.combo = item
+
+    history.easiness_factor_remembering = easiness_factor
+    history.repetition = repetition
+    history.interval = interval
+    history.date_next_review = history.date_last_practiced + timedelta(days=history.interval)
+    history.user = user
+    history.save()
 
 
-        # Update the Move instance
-        item.difficulty_remembering = form.cleaned_data['difficulty_remembering']
-        item.difficulty_of_move = form.cleaned_data['difficulty_of_move']
-        item.easiness_factor_remembering = easiness_factor
-        item.repetition = repetition
-        item.interval = interval
-        item.date_next_review = history.date_last_practiced + timedelta(days=item.interval)
-        item.save()
 
 def get_repetition_counts(request):
     user = request.user
-    repetition_counts = Move.objects.filter(user=user).values('repetition').annotate(count=Count('id')).union(
-        Combo.objects.filter(user=user).values('repetition').annotate(count=Count('id'))).order_by('repetition')
-        
-    return repetition_counts
+
+    # Get Move counts
+    move_counts = Move.objects.filter(user=user).values('repetition').annotate(count=Count('id'))
+    # Convert QuerySet to a dictionary for easier processing
+    move_counts_dict = {item['repetition']: item['count'] for item in move_counts}
+
+    # Get Combo counts
+    combo_counts = Combo.objects.filter(user=user).values('repetition').annotate(count=Count('id'))
+    # Convert QuerySet to a dictionary for easier processing
+    combo_counts_dict = {item['repetition']: item['count'] for item in combo_counts}
+
+    # Initialize an empty dictionary for summed repetition counts
+    repetition_counts = {}
+
+    # Add up the counts for each repetition
+    for repetition in set(move_counts_dict.keys()).union(combo_counts_dict.keys()):
+        move_count = move_counts_dict.get(repetition, 0)
+        combo_count = combo_counts_dict.get(repetition, 0)
+        repetition_counts[repetition] = move_count + combo_count
+
+    
+
+    # Convert back to QuerySet-like list of dictionaries for consistency
+    repetition_counts_qs = [{'repetition': rep, 'count': count} for rep, count in repetition_counts.items()]
+    logger.info(f'repetition_counts is {repetition_counts_qs}')
+    return repetition_counts_qs
 
 
 def get_review_counts(request):
@@ -93,4 +123,6 @@ def get_review_counts(request):
         )
         .order_by('date')
     )
+
+    logger.info(f'review_counts is {review_counts}')
     return review_counts

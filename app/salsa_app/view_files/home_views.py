@@ -9,14 +9,13 @@ from ..utils import get_repetition_counts, get_review_counts
 logger = logging.getLogger('salsa_app')
 
 
-
+@login_required
 def home(request):
 
     # Query the Move and Combo models to get the data for the charts
     repetition_counts = get_repetition_counts(request)
     review_counts = get_review_counts(request)
 
-    logger.info(f'review_counts is {review_counts}')
     # Total counts for Moves, Combos and their practiced percentage
     total_moves = Move.objects.filter(user=request.user).count()
     practiced_moves = Move.objects.filter(user=request.user, repetition__gt=0).count()
