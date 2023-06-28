@@ -22,7 +22,7 @@ RUN apk update && \
 
 # Copy the Django application
 COPY ./app /app
-COPY ./scripts /scripts
+COPY ./scripts /scripts/
 RUN chmod +x /scripts/*
 
 # Add user for application to run as
